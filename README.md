@@ -11,12 +11,14 @@ Create a script that loops through all the stocks for one year and outputs the f
 
 *The total stock volume of the stock. The result should match the following image:
 
-<img width="575" alt="image" src="https://github.com/samcandia/VBA-Challenge/assets/145384304/a6c06ae0-7a1e-4fe0-b678-088373f6aa55">
+<img width="572" alt="image" src="https://github.com/samcandia/VBA-Challenge./assets/145384304/4713fa1b-a3ef-4f2a-9300-f1ba84990e9b">
+
 
 
 Add functionality to your script to return the stock with the "Greatest % increase", "Greatest % decrease", and "Greatest total volume". The solution should match the following image:
 
-<img width="572" alt="image" src="https://github.com/samcandia/VBA-Challenge/assets/145384304/031220f3-bafc-4dd1-84c0-0992379af2da">
+<img width="574" alt="image" src="https://github.com/samcandia/VBA-Challenge./assets/145384304/b30287a9-2673-45df-9241-501d2dd94a65">
+
 
 *Make the appropriate adjustments to your VBA script to enable it to run on every worksheet (that is, every year) at once
 Make sure to use conditional formatting that will highlight positive change in green and negative change in red.
