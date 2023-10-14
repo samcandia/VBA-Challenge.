@@ -1,0 +1,117 @@
+Sub stockdata()
+    For Each ws In Worksheets
+        ws.Activate
+    
+        Dim Ticker As String
+        Dim Yearly_Change As Double
+        Dim Percent_Change As Double
+        Dim Total_Stock_Volume As Double
+        Dim Value As Double
+        Dim Open_Price As Double
+        Dim Close_Price As Double
+        
+        'set columns and rows
+        ws.Range("J1").EntireColumn.Insert
+        ws.Cells(1, 10).Value = "Ticker"
+    
+        ws.Range("K1").EntireColumn.Insert
+        ws.Cells(1, 11).Value = "Yearly Change"
+    
+        ws.Range("L1").EntireColumn.Insert
+        ws.Cells(1, 12).Value = "Percent Change"
+    
+        ws.Range("M1").EntireColumn.Insert
+        ws.Cells(1, 13).Value = "Total Stock Volume"
+        
+        ws.Range("P1").EntireColumn.Insert
+        ws.Cells(1, 16).Value = "Ticker"
+        
+        ws.Range("Q1").EntireColumn.Insert
+        ws.Cells(1, 17).Value = "Value"
+        
+        ws.Cells(2, 15).Value = "Greatest % Increase"
+        ws.Cells(3, 15).Value = "Greatest % Decrease"
+        ws.Cells(4, 15).Value = "Greatest Total Volume"
+            
+        Yearly_Change = 0
+        Relative_Change = 0
+        Total_Stock_Volume = 0
+        ticker_summary_row = 2
+        lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        Open_Price = ws.Cells(2, 3).Value
+    
+        Greatest_Increase = ws.Cells(2, 12).Value
+        Greatest_Decrease = ws.Cells(2, 12).Value
+        Greatest_Total_Volume = ws.Cells(2, 13).Value
+        
+        For input_row = 2 To lastrow
+            Ticker = ws.Cells(input_row, 1).Value
+            Total_Stock_Volume = Total_Stock_Volume + ws.Cells(input_row, 7).Value
+            
+            'last row of current stock
+            If ws.Cells(input_row + 1, 1).Value <> Ticker Then
+                ws.Range("J" & ticker_summary_row).Value = Ticker
+                
+                'set yearly change loop
+                Close_Price = ws.Cells(input_row, 6).Value
+                Yearly_Change = Close_Price - Open_Price
+                ws.Range("K" & ticker_summary_row).Value = Yearly_Change
+                'conditional formatting for yearly change
+                  If Yearly_Change < 0 Then
+                     Range("K" & ticker_summary_row).Interior.ColorIndex = 3
+                  Else
+                     Range("K" & ticker_summary_row).Interior.ColorIndex = 4
+                  End If
+                  
+                'set percent change loop
+                Relative_Change = Yearly_Change / Open_Price
+                ws.Range("L" & ticker_summary_row).Value = FormatPercent(Relative_Change)
+                
+                'set total stock volume loop
+                ws.Range("M" & ticker_summary_row).Value = Total_Stock_Volume
+                
+                'prepare for next stock
+                ticker_summary_row = ticker_summary_row + 1
+                Total_Stock_Volume = 0
+                Open_Price = ws.Cells(input_row + 1, 3).Value
+            End If
+       
+        Next input_row
+
+        For input_row = 2 To lastrow
+        
+                'Greatest Total Volume Summary
+                If Cells(input_row, 13).Value > Greatest_Total_Volume Then
+                    Greatest_Total_Volume = ws.Cells(input_row, 13).Value
+                    ws.Cells(4, 16).Value = ws.Cells(input_row, 10).Value
+                    ws.Cells(4, 17).Value = ws.Cells(input_row, 13).Value
+                Else
+                    Greatest_Total_Volume = Greatest_Total_Volume
+                End If
+                
+                'Greatest Increase Summary
+                If ws.Cells(input_row, 12).Value > Greatest_Increase Then
+                    Greatest_Increase = ws.Cells(input_row, 12).Value
+                    ws.Cells(2, 16).Value = ws.Cells(input_row, 10).Value
+                    ws.Cells(2, 17).Value = ws.Cells(input_row, 12).Value
+                    ws.Cells(2, 17).Style = "Percent"
+                Else
+                    Greatest_Increase = Greatest_Increase
+                End If
+                
+                
+                'Greatest Decrease Summary
+                If ws.Cells(input_row, 12).Value < Greatest_Decrease Then
+                    Greatest_Decrease = ws.Cells(input_row, 12).Value
+                    ws.Cells(3, 16).Value = ws.Cells(input_row, 10).Value
+                    ws.Cells(3, 17).Value = ws.Cells(input_row, 12).Value
+                    ws.Cells(2, 17).Style = "Percent"
+                Else
+                    Greatest_Decrease = Greatest_Decrease
+                End If
+        Next input_row
+        
+        
+     Next ws
+     MsgBox ("Done.")
+End Sub
